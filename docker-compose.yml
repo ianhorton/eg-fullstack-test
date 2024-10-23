@@ -1,0 +1,11 @@
+services:
+
+  eg-fullstack-mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - eg-fullstack-mongodata:/var/lib/mongodb/data
+
+volumes:
+  eg-fullstack-mongodata:
