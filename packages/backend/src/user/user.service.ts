@@ -6,7 +6,7 @@ import { User } from './user.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async signUp(email: string, name: string, password: string): Promise<User> {
     // Check if the user already exists
