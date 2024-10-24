@@ -2,12 +2,13 @@ import { AuthService } from './auth.service';
 import { UserRepositoryPort } from '../ports/user.repository';
 import { TokenServicePort } from '../ports/token.service';
 import { User } from '../domain/entities/user.entity';
-import * as bcrypt from 'bcrypt';
+import { PasswordServicePort } from '../ports/password.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let userRepositoryMock: jest.Mocked<UserRepositoryPort>;
   let tokenServiceMock: jest.Mocked<TokenServicePort>;
+  let passwordServiceMock: jest.Mocked<PasswordServicePort>;
 
   beforeEach(() => {
     // Mock the UserRepositoryPort
@@ -23,7 +24,7 @@ describe('AuthService', () => {
     } as jest.Mocked<TokenServicePort>;
 
     // Initialize AuthService with the mocked dependencies
-    authService = new AuthService(userRepositoryMock, tokenServiceMock);
+    authService = new AuthService(passwordServiceMock, tokenServiceMock, userRepositoryMock);
   });
 
   describe('signUp', () => {
