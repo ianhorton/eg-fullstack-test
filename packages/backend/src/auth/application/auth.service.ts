@@ -24,7 +24,6 @@ export class AuthService {
       throw new Error('User already exists');
     }
 
-    //const passwordHash = await bcrypt.hash(password, 10);
     const passwordHash = await this.passwordService.hashPassword(password);
     const newUser = User.createNew(email, name, passwordHash);
     await this.userRepository.create(newUser);
@@ -36,7 +35,6 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    //const isPasswordValid = user.validatePassword(password, bcrypt.compareSync);
     const isPasswordValid = user.validatePassword(password, this.passwordService.compareHash);
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
