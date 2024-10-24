@@ -5,12 +5,12 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { User } from '../../domain/entities/user.entity';
 import { UserRepositoryPort } from '../../ports/user.repository';
-import { User as UserSchema } from './user.schema';
+import { MongoUser } from './mongo-user.schema';
 
 @Injectable()
 export class MongoUserRepositoryAdapter implements UserRepositoryPort {
   constructor(
-    @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
+    @InjectModel(MongoUser.name) private userModel: Model<MongoUser>,
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -26,4 +26,5 @@ export class MongoUserRepositoryAdapter implements UserRepositoryPort {
     });
     await newUser.save();
   }
+  
 }

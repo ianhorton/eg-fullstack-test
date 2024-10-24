@@ -9,4 +9,5 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
   providers: [AuthService],
   controllers: [AuthController],
 })
-export class AuthModule {}
+
+export class AuthModule { }

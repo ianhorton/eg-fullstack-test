@@ -16,4 +16,5 @@ export class AuthController {
     const token = await this.authService.signIn(body.email, body.password);
     return { token };
   }
+
 }

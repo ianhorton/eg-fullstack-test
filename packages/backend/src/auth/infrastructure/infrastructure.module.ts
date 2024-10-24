@@ -3,10 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { JwtTokenServiceAdapter } from './adapters/jwt-token.service';
 import { MongoUserRepositoryAdapter } from './adapters/mongo-user.repository';
-import { User, UserSchema } from './adapters/user.schema';
+import { MongoUser, UserSchema } from './adapters/mongo-user.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  imports: [MongooseModule.forFeature([{ name: MongoUser.name, schema: UserSchema }])],
   providers: [
     {
       provide: 'UserRepositoryPort',
@@ -19,4 +19,5 @@ import { User, UserSchema } from './adapters/user.schema';
   ],
   exports: ['UserRepositoryPort', 'TokenServicePort'],
 })
+
 export class InfrastructureModule {}
