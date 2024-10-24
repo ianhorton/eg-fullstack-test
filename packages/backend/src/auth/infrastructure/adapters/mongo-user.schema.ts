@@ -1,11 +1,15 @@
 
 import { HydratedDocument } from 'mongoose';
 
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 
 export type UserDocument = HydratedDocument<MongoUser>;
 
-@Schema()
+const options: SchemaOptions = {
+  collection: "users"
+}
+
+@Schema(options)
 export class MongoUser {
 
   @Prop({ required: true })
