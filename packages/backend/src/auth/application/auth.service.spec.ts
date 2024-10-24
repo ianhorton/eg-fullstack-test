@@ -30,7 +30,7 @@ describe('AuthService', () => {
     it('should throw an error if the user already exists', async () => {
       userRepositoryMock.findByEmail.mockResolvedValueOnce({} as User); // Mock existing user
 
-      await expect(authService.signUp('test@test.com', 'password')).rejects.toThrow(
+      await expect(authService.signUp('test@test.com', 'jeff bongo', 'password')).rejects.toThrow(
         'User already exists',
       );
       expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');

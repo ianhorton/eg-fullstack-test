@@ -17,8 +17,8 @@ export class User {
 
   validatePassword(
     password: string,
-    hashComparer: (hash: string, password: string) => boolean,
-  ): boolean {
+    hashComparer: (password: string, hash: string) => Promise<boolean>,
+  ): Promise<boolean> {
     return hashComparer(this.passwordHash, password);
   }
 

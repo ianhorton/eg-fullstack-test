@@ -4,10 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtTokenServiceAdapter } from './adapters/jwt-token.service';
 import { MongoUserRepositoryAdapter } from './adapters/mongo-user.repository';
 import { MongoUser, UserSchema } from './adapters/mongo-user.schema';
+import { BcryptPasswordServiceAdapter } from './adapters/bcrypt-password.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: MongoUser.name, schema: UserSchema }])],
   providers: [
+    {
+      provide: 'PasswordServicePort',
+      useClass: BcryptPasswordServiceAdapter,
+    },
     {
       provide: 'UserRepositoryPort',
       useClass: MongoUserRepositoryAdapter,
@@ -17,7 +22,7 @@ import { MongoUser, UserSchema } from './adapters/mongo-user.schema';
       useClass: JwtTokenServiceAdapter,
     },
   ],
-  exports: ['UserRepositoryPort', 'TokenServicePort'],
+  exports: ['PasswordServicePort', 'UserRepositoryPort', 'TokenServicePort'],
 })
 
-export class InfrastructureModule {}
+export class InfrastructureModule { }
