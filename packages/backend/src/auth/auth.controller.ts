@@ -8,9 +8,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('sign-up')
-  async signUp(@Body() body: { email: string; password: string }): Promise<void> {
+  async signUp(@Body() body: { email: string; name:string, password: string }): Promise<void> {
     this.logger.debug({ body })
-    return this.authService.signUp(body.email, body.password);
+    return this.authService.signUp(body.email, body.name, body.password);
   }
 
   @Post('sign-in')

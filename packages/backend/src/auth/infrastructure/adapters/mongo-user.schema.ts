@@ -16,6 +16,9 @@ export class MongoUser {
   email: string;
 
   @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
   passwordHash: string;
 }
 

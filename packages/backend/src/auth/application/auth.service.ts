@@ -11,18 +11,18 @@ export class AuthService {
   constructor(
     @Inject('UserRepositoryPort')
     private readonly userRepository: UserRepositoryPort,
-    @Inject('TokenServicePort') 
+    @Inject('TokenServicePort')
     private readonly tokenService: TokenServicePort,
-  ) {}
+  ) { }
 
-  async signUp(email: string, password: string): Promise<void> {
+  async signUp(email: string, name: string, password: string): Promise<void> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
       throw new Error('User already exists');
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = User.createNew(email, passwordHash);
+    const newUser = User.createNew(email, name, passwordHash);
     await this.userRepository.create(newUser);
   }
 

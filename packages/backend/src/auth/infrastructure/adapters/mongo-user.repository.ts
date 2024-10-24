@@ -11,20 +11,21 @@ import { MongoUser } from './mongo-user.schema';
 export class MongoUserRepositoryAdapter implements UserRepositoryPort {
   constructor(
     @InjectModel(MongoUser.name) private userModel: Model<MongoUser>,
-  ) {}
+  ) { }
 
   async findByEmail(email: string): Promise<User | null> {
     const userRecord = await this.userModel.findOne({ email }).exec();
     if (!userRecord) return null;
-    return new User(userRecord.email, userRecord.passwordHash);
+    return new User(userRecord.email, userRecord.name, userRecord.passwordHash);
   }
 
   async create(user: User): Promise<void> {
     const newUser = new this.userModel({
       email: user.email,
+      name: user.name,
       passwordHash: user.getPasswordHash(),
     });
     await newUser.save();
   }
-  
+
 }
