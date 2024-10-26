@@ -1,7 +1,13 @@
 import { Button } from "flowbite-react";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./navigation/AppRoutes";
 
 export default function App() {
-  return <Button>Click me</Button>;
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
 
 // import React, { useEffect, useState } from 'react';
@@ -23,4 +29,3 @@ export default function App() {
 // }
 
 // export default App;
-
