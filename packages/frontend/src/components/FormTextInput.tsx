@@ -49,7 +49,7 @@ export function FormTextInput({
       />
       {isInError() && (
         <div className="mb-2 block">
-          <Label color="failure" htmlFor="input-failure" value={errors} />
+          <Label className="text-red-600 px-2 " htmlFor="input-failure" value={errors} />
         </div>
       )}
     </FormElement>
