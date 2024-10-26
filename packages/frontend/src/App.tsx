@@ -1,11 +1,17 @@
-import { Button } from "flowbite-react";
-import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./navigation/AppRoutes";
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './navigation/AppRoutes';
+import { Provider } from 'react-redux';
+import { storeFactory } from './state/StoreFactory';
+
+const logRedux = false;
+const store = storeFactory(logRedux, [], []);
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <Provider store={store}>
+        <AppRoutes />
+      </Provider>
     </BrowserRouter>
   );
 }
