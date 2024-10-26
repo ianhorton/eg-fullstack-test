@@ -34,8 +34,8 @@ export default function SignIn() {
   // );
 
   const initialValues: ISignInFormProps = {
-    email: 'ian+a559@collabfocus.com',
-    password: '123456789012',
+    email: '',
+    password: '',
   };
 
    const onSubmit = async (
@@ -52,9 +52,9 @@ export default function SignIn() {
 
   const validationSchema = object({
     email: string()
-      .email('please use a valid email address')
-      .required('your email address is required'),
-    password: string().required('password is required'),
+      .email('Email address invalid')
+      .required('Email is required'),
+    password: string().required('Password is required'),
   });
 
   const {
@@ -78,7 +78,7 @@ export default function SignIn() {
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput
           id="email"
-          label="Your email"
+          label="Email"
           placeholder="name@company.com"
           required={true}
           type="email"
@@ -91,7 +91,7 @@ export default function SignIn() {
         />
         <FormTextInput
           id="password"
-          label="Your password"
+          label="Password"
           placeholder="••••••••"
           required={true}
           type="password"
