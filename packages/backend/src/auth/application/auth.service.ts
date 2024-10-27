@@ -5,7 +5,7 @@ import { TokenServicePort } from '../ports/token.service';
 import { UserRepositoryPort } from '../ports/user.repository';
 import { PasswordServicePort } from '../ports/password.service';
 import { UserDto } from './dtos/user.dto';
-import { ResultWrapper } from '../../common/result.wrapper';
+import { ResultFactory, ResultWrapper } from '../../common/result.wrapper';
 
 @Injectable()
 export class AuthService {
@@ -22,13 +22,15 @@ export class AuthService {
     email: string,
     name: string,
     password: string,
-  ): Promise<ResultWrapper<UserDto>> {
+  ): Promise<ResultWrapper<UserDto> | ResultWrapper<void>> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      return {
-        success: false,
-        message: 'User already exists.',
-      };
+      // return {
+      //   isSuccess: false,
+      //   isError: false,
+      //   message: 'User already exists.',
+      // };
+      return ResultFactory.returnFailed('User already exists.');
     }
 
     const passwordHash = await this.passwordService.hashPassword(password);
@@ -37,32 +39,40 @@ export class AuthService {
     try {
       const id = await this.userRepository.create(newUser);
 
-      return {
-        success: true,
-        payload: {
-          id,
-          name,
-          email,
-        },
-      };
+      // return {
+      //   isSuccess: true,
+      //   payload: {
+      //     id,
+      //     name,
+      //     email,
+      //   },
+      //};
+      return ResultFactory.returnSuccess({
+        id,
+        name,
+        email,
+      });
     } catch (error) {
-      return {
-        success: false,
-        message: JSON.stringify(error),
-      };
+      // log error
+      // return {
+      //   isError: false,
+      //   message: JSON.stringify(error),
+      // };
+      return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }
 
   async signIn(
     email: string,
     password: string,
-  ): Promise<ResultWrapper<{ token: string }>> {
+  ): Promise<ResultWrapper<{ token: string }> | ResultWrapper<void>> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
-      return {
-        success: false,
-        message: 'Invalid credentials.',
-      };
+      // return {
+      //   isError: false,
+      //   message: 'Invalid credentials.',
+      // };
+      return ResultFactory.returnFailed('User already exists.');
     }
 
     const isPasswordValid = user.validatePassword(
@@ -70,24 +80,29 @@ export class AuthService {
       this.passwordService.compareHash,
     );
     if (!isPasswordValid) {
-      return {
-        success: false,
-        message: 'Invalid credentials.',
-      };
+      // return {
+      //   isError: false,
+      //   message: 'Invalid credentials.',
+      // };
+      return ResultFactory.returnFailed('User already exists.');
     }
 
     try {
       const token = this.tokenService.generateToken(user);
 
-      return {
-        success: true,
-        payload: { token },
-      };
+      // return {
+      //   isError: true,
+      //   payload: { token },
+      // };
+      return ResultFactory.returnSuccess({
+        token,
+      });
     } catch (error) {
-      return {
-        success: false,
-        message: JSON.stringify(error),
-      };
+      // return {
+      //   isError: false,
+      //   message: JSON.stringify(error),
+      // };
+      return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }
 }
