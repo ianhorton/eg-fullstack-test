@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SignUpModel } from '../models/sign-up-model';
+import { SignUpModel } from '../models/sign-up.model';
 
 
 export interface AuthState {

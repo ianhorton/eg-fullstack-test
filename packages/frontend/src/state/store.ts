@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './counter-slice';
+import counterReducer from './counter.slice';
 
 // @ts-ignore
 import { createLogger } from 'redux-logger';
-import { rootReducer } from './root-reducer';
+import { rootReducer } from './root.reducer';
 
 export const store = configureStore({
   reducer: rootReducer,
