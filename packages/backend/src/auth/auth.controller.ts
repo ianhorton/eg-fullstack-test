@@ -31,6 +31,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Body() body: { email: string; password: string },
   ): Promise<ResponseWrapper<{ token: string }>> {
+    this.logger.debug({ body });
     const result = await this.authService.signIn(body.email, body.password);
     const reponse = ResponseBuilder.build(result);
     res.status(reponse.httpStatus);

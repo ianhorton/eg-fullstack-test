@@ -13,6 +13,9 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { SignUpModel } from '../models/sign-up.model';
 import { UserModel } from '../models/user.model';
 import {
+  signInCommand,
+  signInFailedEvent,
+  signInSucceededEvent,
   signUpCommand,
   signUpFailedEvent,
   signUpSucceededEvent,
@@ -21,6 +24,7 @@ import { EpicDependencies } from './epic-dependencies';
 import { RootState } from './store';
 import { ResponseWrapper } from '../common/response-wrapper';
 import { AxiosError, AxiosResponse } from 'axios';
+import { TokenModel } from '../models/token.model';
 
 const signUpCommandEpic$: Epic = (
   action$: Observable<PayloadAction<SignUpModel>>,
@@ -36,7 +40,7 @@ const signUpCommandEpic$: Epic = (
       } = action;
       return from(signUp(email, name, password)).pipe(
         map((response: AxiosResponse) => {
-          const res = response.data as ResponseWrapper<UserModel>
+          const res = response.data as ResponseWrapper<UserModel>;
           return signUpSucceededEvent(res.payload);
         }),
         catchError((error: AxiosError) => {
@@ -51,4 +55,33 @@ const signUpCommandEpic$: Epic = (
   );
 };
 
-export default combineEpics(signUpCommandEpic$);
+const signInCommandEpic$: Epic = (
+  action$: Observable<PayloadAction<SignUpModel>>,
+  rootState$: Observable<RootState>,
+  { api: { signIn } }: EpicDependencies,
+) => {
+  return action$.pipe(
+    filter((action) => signInCommand.match(action)),
+
+    mergeMap((action) => {
+      const {
+        payload: { email, password },
+      } = action;
+      return from(signIn(email, password)).pipe(
+        map((response: AxiosResponse) => {
+          const res = response.data as ResponseWrapper<TokenModel>;
+          return signInSucceededEvent(res.payload.token);
+        }),
+        catchError((error: AxiosError) => {
+          if (error.response.data) {
+            const res = error.response.data as ResponseWrapper;
+            return of(signInFailedEvent(res.message));
+          }
+          return of(signInFailedEvent(JSON.stringify(error)));
+        }),
+      );
+    }),
+  );
+};
+
+export default combineEpics(signUpCommandEpic$, signInCommandEpic$);

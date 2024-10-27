@@ -25,7 +25,9 @@ export class AuthService {
   ): Promise<ResultWrapper<UserDto> | ResultWrapper<void>> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      return ResultFactory.returnFailed('A User with this Email already exists.');
+      return ResultFactory.returnFailed(
+        'A User with this Email already exists.',
+      );
     }
 
     const passwordHash = await this.passwordService.hashPassword(password);
@@ -39,6 +41,7 @@ export class AuthService {
         email,
       });
     } catch (error) {
+      console.error(error);
       return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }
@@ -49,16 +52,16 @@ export class AuthService {
   ): Promise<ResultWrapper<{ token: string }> | ResultWrapper<void>> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
-      return ResultFactory.returnFailed('User already exists.');
+      return ResultFactory.returnFailed('Invalid credentials.');
     }
 
     const isPasswordValid = user.validatePassword(
       password,
       this.passwordService.compareHash,
     );
-    
+
     if (!isPasswordValid) {
-      return ResultFactory.returnFailed('User already exists.');
+      return ResultFactory.returnFailed('Invalid credentials.');
     }
 
     try {
@@ -67,6 +70,7 @@ export class AuthService {
         token,
       });
     } catch (error) {
+      console.error(error);
       return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }

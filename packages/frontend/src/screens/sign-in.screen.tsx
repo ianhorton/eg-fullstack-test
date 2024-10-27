@@ -6,49 +6,34 @@ import { object, string } from 'yup';
 
 import AuthLayout from '../components/auth-layout';
 import { FormTextInput } from '../components/form-text-input';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { signInCommand } from '../state/auth.slice';
+import FormError from '../components/form-error';
 
-// import { FormTextInput } from '../components/molecules';
-// import useAccess from '../state/access';
-
-interface ISignInFormProps {
+type SignInFormProps = {
   email: string;
   password: string;
-}
+};
 
 export default function SignIn() {
-  // const navigate = useNavigate();
+  const isSignInInProgress = useAppSelector(
+    (state) => state.authState.isSignInInProgress,
+  );
+  const authErrors = useAppSelector((state) => state.authState.errors);
+  const dispatch = useAppDispatch();
 
-  // const { login, getCurrentAccess } = useAccess();
-
-  // useEffect(
-  //   () => {
-  //     try {
-  //       getCurrentAccess();
-  //     } catch (error) {
-  //       // swallow error
-  //     }
-  //   },
-  //   [
-  //     // intentionally empty
-  //   ],
-  // );
-
-  const initialValues: ISignInFormProps = {
-    email: '',
-    password: '',
+  const initialValues: SignInFormProps = {
+    email: 'jb@foo.com',
+    password: '12345',
   };
 
-   const onSubmit = async (
-  //   { email, password }: ISignInFormProps,
-  //   formikHelpers: FormikHelpers<ISignInFormProps>,
-   ) => {
-  //   try {
-  //     await login(email, password);
-  //     navigate('/collaborations');
-  //   } catch (error) {
-  //     console.log('error confirming access:', error);
-  //   }
-   };
+  function onSubmit(
+    values: SignInFormProps,
+    formikHelpers: FormikHelpers<SignInFormProps>,
+  ) {
+    const { email, password } = values;
+    dispatch(signInCommand({ email, password }));
+  }
 
   const validationSchema = object({
     email: string()
@@ -61,7 +46,6 @@ export default function SignIn() {
     values,
     handleChange,
     handleSubmit,
-    isSubmitting,
     errors,
     touched,
     handleBlur,
@@ -102,8 +86,10 @@ export default function SignIn() {
           errors={errors.password}
           value={values.password}
         />
-
-        <Button disabled={isSubmitting} type="submit">
+        {authErrors.map((e, i) => {
+          return <FormError key={i} errors={e} />;
+        })}
+        <Button disabled={isSignInInProgress} type="submit">
           Sign in
         </Button>
         <Label className="flex" htmlFor="agree">

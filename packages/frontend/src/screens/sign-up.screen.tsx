@@ -37,11 +37,8 @@ export default function SignUp() {
     values: SignUpFormProps,
     formikHelpers: FormikHelpers<SignUpFormProps>,
   ) {
-    //alert(JSON.stringify(values, null, 2));
     const { name, email, password } = values;
     dispatch(signUpCommand({ name, email, password }));
-    // const r = await api.signUp(email, name, password);
-    // console.log(r);
   }
 
   const validationSchema = object({
@@ -55,25 +52,16 @@ export default function SignUp() {
       .required('Confirm Password is required'),
   });
 
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    isSubmitting,
-    errors,
-    touched,
-    handleBlur,
-  } = useFormik({
-    initialValues,
-    onSubmit,
-    validationSchema,
-  });
+  const { values, handleChange, handleSubmit, errors, touched, handleBlur } =
+    useFormik({
+      initialValues,
+      onSubmit,
+      validationSchema,
+    });
 
   return (
     <AuthLayout>
       <span className="text-l font-bold text-gray-900 ">Sign up</span>
-
-      {isSignUpInProgress ?? <>Sign Up Is in Progress!!!</>}
 
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput
@@ -130,7 +118,7 @@ export default function SignUp() {
         {authErrors.map((e, i) => {
           return <FormError key={i} errors={e} />;
         })}
-        <Button disabled={isSubmitting} type="submit">
+        <Button disabled={isSignUpInProgress} type="submit">
           Sign up
         </Button>
         <Label className="flex" htmlFor="agree">

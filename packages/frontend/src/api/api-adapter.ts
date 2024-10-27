@@ -14,8 +14,7 @@ export class ApiAdapter implements ApiPort {
     return axios.post('/auth/sign-up', { email, name, password });
   }
 
-  private validateStatus(status: number): boolean {
-    console.log(status);
-    return status === 500;
+  signIn(email: string, password: string): Promise<AxiosResponse> {
+    return axios.post('/auth/sign-in', { email, password });
   }
 }

@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SignUpModel } from '../models/sign-up.model';
 import { UserModel } from '../models/user.model';
+import { SignInModel } from '../models/sign-in.model';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 export interface AuthState {
   userId: string | undefined;
   user: UserModel | undefined;
   errors: string[];
   isSignUpInProgress: boolean;
+  isSignInInProgress: boolean;
   token: string | undefined;
+  tokenExpires: number | undefined;
 }
 
 const initialState: AuthState = {
@@ -15,7 +19,9 @@ const initialState: AuthState = {
   user: undefined,
   errors: [],
   isSignUpInProgress: false,
+  isSignInInProgress: false,
   token: undefined,
+  tokenExpires: undefined,
 };
 
 const authSlice = createSlice({
@@ -65,18 +71,40 @@ const authSlice = createSlice({
         ...state,
       };
     },
-    // signOutSucceededEvent: (): AuthState => {
-    //   return initialState;
-    // },
-    // signOutFailedEvent: (
-    //   state: AuthState,
-    //   action: PayloadAction<string>,
-    // ): AuthState => {
-    //   return {
-    //     ...state,
-    //     errors: [...state.errors, action.payload],
-    //   };
-    // },
+
+    signInCommand: (
+      state: AuthState,
+      action: PayloadAction<SignInModel>,
+    ): AuthState => {
+      return {
+        ...state,
+        isSignInInProgress: true,
+      };
+    },
+
+    signInSucceededEvent: (
+      state: AuthState,
+      action: PayloadAction<string>,
+    ): AuthState => {
+      const { payload } = action;
+      return {
+        ...state,
+        isSignInInProgress: false,
+        token: payload,
+        tokenExpires: jwtDecode<JwtPayload>(payload).exp,
+      };
+    },
+
+    signInFailedEvent: (
+      state: AuthState,
+      action: PayloadAction<string>,
+    ): AuthState => {
+      return {
+        ...state,
+        errors: [...state.errors, action.payload],
+        isSignUpInProgress: false,
+      };
+    },
   },
 });
 
@@ -86,6 +114,10 @@ export const {
   signUpCommand,
   signUpSucceededEvent,
   signUpFailedEvent,
+
+  signInCommand,
+  signInSucceededEvent,
+  signInFailedEvent,
 
   signOutCommand,
 } = authSlice.actions;

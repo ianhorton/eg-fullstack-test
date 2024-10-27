@@ -1,5 +1,5 @@
-export interface SignUpModel {
+import { SignInModel } from './sign-in.model';
+
+export interface SignUpModel extends SignInModel {
   readonly name: string;
-  readonly email: string;
-  readonly password: string;
 }
