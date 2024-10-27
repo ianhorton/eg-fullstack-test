@@ -3,7 +3,7 @@ import counterReducer from './counter-slice';
 
 // @ts-ignore
 import { createLogger } from 'redux-logger';
-import { rootReducer } from './RootReducer';
+import { rootReducer } from './root-reducer';
 
 export const store = configureStore({
   reducer: rootReducer,

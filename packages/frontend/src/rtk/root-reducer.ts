@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import authSlice from './AuthSlice';
+import authSlice from './auth-slice';
 //import authTransientReducer from './AuthTransientReducer';
 import counterSlice from './counter-slice';
 

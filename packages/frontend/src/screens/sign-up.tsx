@@ -4,8 +4,8 @@ import { FormikHelpers, useFormik } from 'formik';
 // import { useNavigate, useSearchParams } from 'react-router-dom';
 // import { useRecoilValue } from 'recoil';
 import { object, ref, string } from 'yup';
-import { FormTextInput } from '../components/FormTextInput';
-import AuthLayout from '../components/AuthLayout';
+import { FormTextInput } from '../components/form-text-input';
+import AuthLayout from '../components/auth-layout';
 
 
 type SignUpFormProps = {

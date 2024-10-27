@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
-import AuthLayout from '../components/AuthLayout';
-import { FormTextInput } from '../components/FormTextInput';
+import AuthLayout from '../components/auth-layout';
+import { FormTextInput } from '../components/form-text-input';
 
 // import { FormTextInput } from '../components/molecules';
 // import useAccess from '../state/access';

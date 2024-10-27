@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import RequiresSignIn from './RequiresSignIn';
-import SignIn from '../screens/SignIn';
-import SignUp from '../screens/SignUp';
-import NotFound from '../screens/NotFound';
-import Home from '../screens/Home';
+import RequiresSignIn from './requires-sign-in';
+import SignIn from '../screens/sign-in';
+import SignUp from '../screens/sign-up';
+import NotFound from '../screens/not-found';
+import Home from '../screens/home';
 
 export default function AppRoutes() {
   return (

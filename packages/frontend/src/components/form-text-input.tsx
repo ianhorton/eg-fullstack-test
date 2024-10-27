@@ -1,5 +1,5 @@
 import { Label, TextInput } from "flowbite-react";
-import { FormElement } from "./FormElement";
+import { FormElement } from "./form-element";
 import { ChangeEventHandler, FocusEventHandler } from "react";
 
 

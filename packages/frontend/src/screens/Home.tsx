@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from 'flowbite-react';
 import { useAppDispatch, useAppSelector } from '../rtk/hooks';
 import { decrement, increment } from '../rtk/counter-slice';
-import { signUpCommand } from '../rtk/AuthSlice';
+import { signUpCommand } from '../rtk/auth-slice';
 
 export default function Home() {
   const count = useAppSelector((state) => state.counterState.value);
