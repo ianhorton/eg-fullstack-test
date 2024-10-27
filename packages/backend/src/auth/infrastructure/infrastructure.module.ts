@@ -21,6 +21,14 @@ import { BcryptPasswordServiceAdapter } from './adapters/bcrypt-password.service
       provide: 'TokenServicePort',
       useClass: JwtTokenServiceAdapter,
     },
+    {
+      provide: 'TOKEN_EXPIRES_IN',
+      useValue: '1h',
+    },
+    {
+      provide: 'TOKEN_SECRET',
+      useValue: process.env.JWT_SECRET,
+    },
   ],
   exports: ['PasswordServicePort', 'UserRepositoryPort', 'TokenServicePort'],
 })

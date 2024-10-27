@@ -10,9 +10,6 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class MongoUser {
-  // @Prop({ type: String, required: true, unique: true })
-  // userId: string;
-
   @Prop({ type: String, required: true, unique: true })
   email: string;
 

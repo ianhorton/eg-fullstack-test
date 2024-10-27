@@ -20,6 +20,7 @@ export class MongoUserRepositoryAdapter implements UserRepositoryPort {
       userRecord.email,
       userRecord.name,
       userRecord.passwordHash,
+      userRecord._id.toString()
     );
   }
 
@@ -30,6 +31,7 @@ export class MongoUserRepositoryAdapter implements UserRepositoryPort {
       passwordHash: user.getPasswordHash(),
     });
     const result = await newUser.save();
-    return result.id.toString();
+    console.log(result);
+    return result._id.toString();
   }
 }

@@ -3,6 +3,7 @@ export class User {
     public readonly email: string,
     public readonly name: string,
     private passwordHash: string, // Store the hashed password
+    public readonly id?: string,
   ) {}
 
   // Password requirements:

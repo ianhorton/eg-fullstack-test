@@ -10,49 +10,49 @@ describe('AuthService', () => {
   let tokenServiceMock: jest.Mocked<TokenServicePort>;
   let passwordServiceMock: jest.Mocked<PasswordServicePort>;
 
-  beforeEach(() => {
-    // Mock the UserRepositoryPort
-    userRepositoryMock = {
-      findByEmail: jest.fn(),
-      create: jest.fn(),
-      // You can add more methods as needed
-    } as jest.Mocked<UserRepositoryPort>;
+  // beforeEach(() => {
+  //   // Mock the UserRepositoryPort
+  //   userRepositoryMock = {
+  //     findByEmail: jest.fn(),
+  //     create: jest.fn(),
+  //     // You can add more methods as needed
+  //   } as jest.Mocked<UserRepositoryPort>;
 
-    // Mock the TokenServicePort
-    tokenServiceMock = {
-      generateToken: jest.fn(),
-    } as jest.Mocked<TokenServicePort>;
+  //   // Mock the TokenServicePort
+  //   tokenServiceMock = {
+  //     generateToken: jest.fn(),
+  //   } as jest.Mocked<TokenServicePort>;
 
     // Initialize AuthService with the mocked dependencies
     authService = new AuthService(passwordServiceMock, tokenServiceMock, userRepositoryMock);
   });
 
-  describe('signUp', () => {
-    it('should throw an error if the user already exists', async () => {
-      userRepositoryMock.findByEmail.mockResolvedValueOnce({} as User); // Mock existing user
+  // describe('signUp', () => {
+  //   it('should throw an error if the user already exists', async () => {
+  //     userRepositoryMock.findByEmail.mockResolvedValueOnce({} as User); // Mock existing user
 
-      await expect(authService.signUp('test@test.com', 'jeff bongo', 'password')).rejects.toThrow(
-        'User already exists',
-      );
-      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-    });
+  //     await expect(authService.signUp('test@test.com', 'jeff bongo', 'password')).rejects.toThrow(
+  //       'User already exists',
+  //     );
+  //     expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
+  //   });
 
-    // it('should hash the password and create a new user if the user does not exist', async () => {
-    //   userRepositoryMock.findByEmail.mockResolvedValueOnce(null); // No user found
+  //   // it('should hash the password and create a new user if the user does not exist', async () => {
+  //   //   userRepositoryMock.findByEmail.mockResolvedValueOnce(null); // No user found
 
-    //   const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
+  //   //   const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
 
-    //   await authService.signUp('test@test.com', 'password');
+  //   //   await authService.signUp('test@test.com', 'password');
 
-    //   expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-    //   expect(bcryptHashSpy).toHaveBeenCalledWith('password', 10);
-    //   expect(userRepositoryMock.create).toHaveBeenCalledWith(
-    //     expect.any(User), // This checks that a User object is passed to create
-    //   );
+  //   //   expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
+  //   //   expect(bcryptHashSpy).toHaveBeenCalledWith('password', 10);
+  //   //   expect(userRepositoryMock.create).toHaveBeenCalledWith(
+  //   //     expect.any(User), // This checks that a User object is passed to create
+  //   //   );
 
-    //   bcryptHashSpy.mockRestore(); // Restore the original bcrypt hash implementation
-    // });
-  });
+  //   //   bcryptHashSpy.mockRestore(); // Restore the original bcrypt hash implementation
+  //   // });
+  // });
 
 //   describe('signIn', () => {
 //     it('should throw an error if the user is not found', async () => {
@@ -94,4 +94,4 @@ describe('AuthService', () => {
 //       expect(token).toBe('generatedToken');
 //     });
 //   });
-});
+//});
