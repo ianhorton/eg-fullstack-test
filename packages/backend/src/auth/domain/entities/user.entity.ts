@@ -3,7 +3,7 @@ export class User {
     public readonly email: string,
     public readonly name: string,
     private passwordHash: string, // Store the hashed password
-  ) { }
+  ) {}
 
   // Password requirements:
   //  • Minimum length of 8 characters
