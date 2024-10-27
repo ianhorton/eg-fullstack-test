@@ -1,3 +1,10 @@
+export interface ResultWrapper<T = void> {
+  readonly isError: boolean;
+  readonly isSuccess: boolean;
+  readonly payload?: T;
+  readonly message?: string;
+}
+
 export class ResultFactory {
   static returnSuccess<T>(payload: T): ResultWrapper<T> {
     return {
@@ -22,11 +29,4 @@ export class ResultFactory {
       message,
     };
   }
-}
-
-export interface ResultWrapper<T = void> {
-  readonly isError: boolean;
-  readonly isSuccess: boolean;
-  readonly payload?: T;
-  readonly message?: string;
 }

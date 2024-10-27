@@ -25,12 +25,7 @@ export class AuthService {
   ): Promise<ResultWrapper<UserDto> | ResultWrapper<void>> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      // return {
-      //   isSuccess: false,
-      //   isError: false,
-      //   message: 'User already exists.',
-      // };
-      return ResultFactory.returnFailed('User already exists.');
+      return ResultFactory.returnFailed('A User with this Email already exists.');
     }
 
     const passwordHash = await this.passwordService.hashPassword(password);
@@ -38,26 +33,12 @@ export class AuthService {
 
     try {
       const id = await this.userRepository.create(newUser);
-
-      // return {
-      //   isSuccess: true,
-      //   payload: {
-      //     id,
-      //     name,
-      //     email,
-      //   },
-      //};
       return ResultFactory.returnSuccess({
         id,
         name,
         email,
       });
     } catch (error) {
-      // log error
-      // return {
-      //   isError: false,
-      //   message: JSON.stringify(error),
-      // };
       return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }
@@ -68,10 +49,6 @@ export class AuthService {
   ): Promise<ResultWrapper<{ token: string }> | ResultWrapper<void>> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
-      // return {
-      //   isError: false,
-      //   message: 'Invalid credentials.',
-      // };
       return ResultFactory.returnFailed('User already exists.');
     }
 
@@ -79,29 +56,17 @@ export class AuthService {
       password,
       this.passwordService.compareHash,
     );
+    
     if (!isPasswordValid) {
-      // return {
-      //   isError: false,
-      //   message: 'Invalid credentials.',
-      // };
       return ResultFactory.returnFailed('User already exists.');
     }
 
     try {
       const token = this.tokenService.generateToken(user);
-
-      // return {
-      //   isError: true,
-      //   payload: { token },
-      // };
       return ResultFactory.returnSuccess({
         token,
       });
     } catch (error) {
-      // return {
-      //   isError: false,
-      //   message: JSON.stringify(error),
-      // };
       return ResultFactory.returnFailedError(JSON.stringify(error));
     }
   }

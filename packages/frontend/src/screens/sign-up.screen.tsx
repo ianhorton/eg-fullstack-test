@@ -8,6 +8,9 @@ import { FormTextInput } from '../components/form-text-input';
 import AuthLayout from '../components/auth-layout';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { signUpCommand } from '../state/auth.slice';
+import { ApiAdapter } from '../api/api-adapter';
+import { useEffect } from 'react';
+import FormError from '../components/form-error';
 
 type SignUpFormProps = {
   email: string;
@@ -20,6 +23,7 @@ export default function SignUp() {
   const isSignUpInProgress = useAppSelector(
     (state) => state.authState.isSignUpInProgress,
   );
+  const authErrors = useAppSelector((state) => state.authState.errors);
   const dispatch = useAppDispatch();
 
   const initialValues: SignUpFormProps = {
@@ -29,14 +33,16 @@ export default function SignUp() {
     confirmPassword: '12345',
   };
 
-  const onSubmit = (
+  function onSubmit(
     values: SignUpFormProps,
     formikHelpers: FormikHelpers<SignUpFormProps>,
-  ) => {
+  ) {
     //alert(JSON.stringify(values, null, 2));
     const { name, email, password } = values;
     dispatch(signUpCommand({ name, email, password }));
-  };
+    // const r = await api.signUp(email, name, password);
+    // console.log(r);
+  }
 
   const validationSchema = object({
     email: string()
@@ -121,7 +127,9 @@ export default function SignUp() {
           errors={errors.confirmPassword}
           value={values.confirmPassword}
         />
-
+        {authErrors.map((e, i) => {
+          return <FormError key={i} errors={e} />;
+        })}
         <Button disabled={isSubmitting} type="submit">
           Sign up
         </Button>

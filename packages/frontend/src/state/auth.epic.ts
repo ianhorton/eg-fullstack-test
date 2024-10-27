@@ -1,13 +1,5 @@
-import { PayloadAction } from '@reduxjs/toolkit';
 import { combineEpics, Epic } from 'redux-observable';
-import { SignUpModel } from '../models/sign-up.model';
-import { RootState } from './store';
-import {
-  signUpCommand,
-  signUpFailedEvent,
-  signUpSucceededEvent,
-} from './auth.slice';
-import { Observable, from, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import {
   catchError,
   filter,
@@ -15,13 +7,25 @@ import {
   mergeMap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { EpicDependencies } from './epic-dependencies';
+
+import { PayloadAction } from '@reduxjs/toolkit';
+
+import { SignUpModel } from '../models/sign-up.model';
 import { UserModel } from '../models/user.model';
+import {
+  signUpCommand,
+  signUpFailedEvent,
+  signUpSucceededEvent,
+} from './auth.slice';
+import { EpicDependencies } from './epic-dependencies';
+import { RootState } from './store';
+import { ResponseWrapper } from '../common/response-wrapper';
+import { AxiosError, AxiosResponse } from 'axios';
 
 const signUpCommandEpic$: Epic = (
   action$: Observable<PayloadAction<SignUpModel>>,
   rootState$: Observable<RootState>,
-  { api: { signUp } }: EpicDependencies,
+  { api: { signUp, hello } }: EpicDependencies,
 ) => {
   return action$.pipe(
     filter((action) => signUpCommand.match(action)),
@@ -31,19 +35,15 @@ const signUpCommandEpic$: Epic = (
         payload: { email, name, password },
       } = action;
       return from(signUp(email, name, password)).pipe(
-        map((response: Response) => {
-          console.log(response);
-          if (response.ok) {
-            from(response.json()).pipe(
-              map((data: UserModel) => {
-                return of(signUpSucceededEvent(data));
-              }),
-            );
-          } else {
-            return of(signUpFailedEvent('Something went wrong!'));
-          }
+        map((response: AxiosResponse) => {
+          const res = response.data as ResponseWrapper<UserModel>
+          return signUpSucceededEvent(res.payload);
         }),
-        catchError((error) => {
+        catchError((error: AxiosError) => {
+          if (error.response.data) {
+            const res = error.response.data as ResponseWrapper;
+            return of(signUpFailedEvent(res.message));
+          }
           return of(signUpFailedEvent(JSON.stringify(error)));
         }),
       );

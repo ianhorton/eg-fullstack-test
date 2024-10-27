@@ -1,9 +1,9 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 import { AuthService } from '../auth/application/auth.service';
+import { ResponseBuilder, ResponseWrapper } from '../common/response.builder';
 import { UserDto } from './application/dtos/user.dto';
-import { ResultWrapper } from 'src/common/result.wrapper';
-import { ResponseBuilder, ResponseWrapper } from 'src/common/response.builder';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +12,7 @@ export class AuthController {
 
   @Post('sign-up')
   async signUp(
+    @Res({ passthrough: true }) res: Response,
     @Body() body: { email: string; name: string; password: string },
   ): Promise<ResponseWrapper<UserDto>> {
     this.logger.debug({ body });
@@ -21,15 +22,18 @@ export class AuthController {
       body.password,
     );
     const reponse = ResponseBuilder.build(result);
+    res.status(reponse.httpStatus);
     return reponse;
   }
 
   @Post('sign-in')
   async signIn(
+    @Res({ passthrough: true }) res: Response,
     @Body() body: { email: string; password: string },
   ): Promise<ResponseWrapper<{ token: string }>> {
     const result = await this.authService.signIn(body.email, body.password);
     const reponse = ResponseBuilder.build(result);
+    res.status(reponse.httpStatus);
     return reponse;
   }
 }

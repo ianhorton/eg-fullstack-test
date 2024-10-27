@@ -1,7 +1,8 @@
-import { Label, TextInput } from "flowbite-react";
-import { FormElement } from "./form-element";
-import { ChangeEventHandler, FocusEventHandler } from "react";
+import { TextInput } from 'flowbite-react';
+import { ChangeEventHandler, FocusEventHandler } from 'react';
 
+import { FormElement } from './form-element';
+import FormError from './form-error';
 
 export function FormTextInput({
   id,
@@ -48,9 +49,10 @@ export function FormTextInput({
         onBlur={onBlur}
       />
       {isInError() && (
-        <div className="mb-2 block">
-          <Label className="text-red-600 px-2 " htmlFor="input-failure" value={errors} />
-        </div>
+        // <div className="mb-2 block">
+        //   <Label className="text-red-600 px-2 " htmlFor="input-failure" value={errors} />
+        // </div>
+        <FormError errors={errors} />
       )}
     </FormElement>
   );

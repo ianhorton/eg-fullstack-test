@@ -40,11 +40,11 @@ const authSlice = createSlice({
       state: AuthState,
       action: PayloadAction<UserModel>,
     ): AuthState => {
-      const { payload} = action;
+      const { payload } = action;
       return {
         ...state,
         user: payload,
-        userId: payload.userId,
+        userId: payload.id,
         isSignUpInProgress: false,
       };
     },

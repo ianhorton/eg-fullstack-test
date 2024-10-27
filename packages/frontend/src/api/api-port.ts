@@ -1,5 +1,7 @@
-export interface ApiPort {
-  hello(): Promise<Response>;
+import { AxiosResponse } from "axios";
 
-  signUp(email: string, name: string, password: string): Promise<Response>;
+export interface ApiPort {
+  hello(): Promise<AxiosResponse>;
+
+  signUp(email: string, name: string, password: string): Promise<AxiosResponse>;
 }
