@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-
-//import { useAuthContext } from '../contexts/AuthContext';
+import { useAppSelector } from '../state/hooks';
 
 function RequiresSignIn({ children }: { children: ReactElement }) {
-  //const { userId } = useAuthContext();
 
-  if (true) {
+  const userId = useAppSelector((state) => state.authState.userId);
+
+  if (userId) {
     return children;
   }
   return <Navigate to={`/sign-in`} />;

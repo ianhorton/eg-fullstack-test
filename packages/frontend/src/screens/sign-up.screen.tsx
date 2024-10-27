@@ -6,7 +6,8 @@ import { FormikHelpers, useFormik } from 'formik';
 import { object, ref, string } from 'yup';
 import { FormTextInput } from '../components/form-text-input';
 import AuthLayout from '../components/auth-layout';
-
+import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { signUpCommand } from '../state/auth.slice';
 
 type SignUpFormProps = {
   email: string;
@@ -16,7 +17,10 @@ type SignUpFormProps = {
 };
 
 export default function SignUp() {
-
+  const isSignUpInProgress = useAppSelector(
+    (state) => state.authState.isSignUpInProgress,
+  );
+  const dispatch = useAppDispatch();
 
   const initialValues: SignUpFormProps = {
     email: 'foo@bar.com',
@@ -31,7 +35,7 @@ export default function SignUp() {
   ) => {
     //alert(JSON.stringify(values, null, 2));
     const { name, email, password } = values;
-    //signUp({ name, email, password });
+    dispatch(signUpCommand({ name, email, password }));
   };
 
   const validationSchema = object({
@@ -63,7 +67,7 @@ export default function SignUp() {
     <AuthLayout>
       <span className="text-l font-bold text-gray-900 ">Sign up</span>
 
-      {/* {isSignUpInProgress ?? <>Sign Up Is in Progress!!!</>} */}
+      {isSignUpInProgress ?? <>Sign Up Is in Progress!!!</>}
 
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput

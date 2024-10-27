@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SignUpModel } from '../models/sign-up.model';
-
+import { UserModel } from '../models/user.model';
 
 export interface AuthState {
   userId: string | undefined;
+  user: UserModel | undefined;
   errors: string[];
   isSignUpInProgress: boolean;
   token: string | undefined;
@@ -11,6 +12,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   userId: undefined,
+  user: undefined,
   errors: [],
   isSignUpInProgress: false,
   token: undefined,
@@ -34,18 +36,20 @@ const authSlice = createSlice({
       };
     },
 
-    signUpFailedEvent: (
+    signUpSucceededEvent: (
       state: AuthState,
-      action: PayloadAction<string>,
+      action: PayloadAction<UserModel>,
     ): AuthState => {
+      const { payload} = action;
       return {
         ...state,
-        errors: [...state.errors, action.payload],
+        user: payload,
+        userId: payload.userId,
         isSignUpInProgress: false,
       };
     },
 
-    signUpSucceededEvent: (
+    signUpFailedEvent: (
       state: AuthState,
       action: PayloadAction<string>,
     ): AuthState => {
@@ -80,10 +84,10 @@ export const {
   resetAuthCommand,
 
   signUpCommand,
-  signUpFailedEvent,
   signUpSucceededEvent,
+  signUpFailedEvent,
 
-  signOutCommand
+  signOutCommand,
 } = authSlice.actions;
 
 export default authSlice.reducer;
