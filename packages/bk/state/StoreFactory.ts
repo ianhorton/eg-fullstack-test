@@ -28,38 +28,39 @@ const storeFactory = (
   middlewares: Middleware[] = [],
   enhancers?: StoreEnhancer<{}, {}>[],
 ): EnhancedStore<RootState> => {
-  const epicMiddleware = createEpicMiddleware();
-  middlewares.push(epicMiddleware);
+  // const epicMiddleware = createEpicMiddleware();
+  // middlewares.push(epicMiddleware);
 
   if (logRedux) {
     middlewares.push(createLogger());
   }
 
-  const persistConfig: PersistConfig<RootState> = {
-    key: 'root',
-    storage: storage,
-    blacklist: ['authTransientState'],
-  };
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+  // const persistConfig: PersistConfig<RootState> = {
+  //   key: 'root',
+  //   storage: storage,
+  //   blacklist: ['authTransientState'],
+  // };
+  // const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  const options = {
-    serializableCheck: {
-      ignoredActions: [REGISTER, PERSIST],
-    },
-  };
+  // const options = {
+  //   serializableCheck: {
+  //     ignoredActions: [REGISTER, PERSIST],
+  //   },
+  // };
 
   const configureStoreOptions: ConfigureStoreOptions = {
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware(options).concat(middlewares),
-    enhancers: (getDefaultEnhancers) =>
-      getDefaultEnhancers().concat(enhancers ?? []),
+    reducer: rootReducer,
+    // middleware: (getDefaultMiddleware) =>
+    //   getDefaultMiddleware(options).concat(middlewares),
+    // enhancers: (getDefaultEnhancers) =>
+    //   getDefaultEnhancers().concat(enhancers ?? []),
   };
 
   const store = configureStore(configureStoreOptions);
 
   //epicMiddleware.run(rootEpic);
 
+  console.log(store);
   return store;
 };
 

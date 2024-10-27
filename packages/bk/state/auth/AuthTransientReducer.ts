@@ -12,7 +12,7 @@ import {
   // signOutSucceededEvent,
    signUpCommand,
   // userDoesNotExistEvent,
-} from "./AuthSlice";
+} from "../../../frontend/src/rtk/AuthSlice";
 
 
 export interface AccessTransientState {

@@ -7,8 +7,6 @@ import { object, ref, string } from 'yup';
 import { FormTextInput } from '../components/FormTextInput';
 import AuthLayout from '../components/AuthLayout';
 
-// import { FormTextInput } from '../components/molecules';
-// import useAccess, { accessState } from '../state/access';
 
 type SignUpFormProps = {
   email: string;
@@ -18,64 +16,23 @@ type SignUpFormProps = {
 };
 
 export default function SignUp() {
-  // const [searchParams] = useSearchParams();
-  // const navigate = useNavigate();
 
-  // const { createAccess, confirmAccess } = useAccess();
-  // const [code, setCode] = useState('');
-  // const [confirmingAccess, setConfirmingAccess] = useState(false);
-  // const [confirmingAccessErrors, setConfirmingAccessErrors] = useState<
-  //   string | undefined
-  // >(undefined);
-
-  // const { userId } = useRecoilValue(accessState);
-
-  // const initialValues: SignUpFormProps = {
-  //   email: `jb${Math.floor(Math.random() * 1000)}@foo.com`,
-  //   name: 'Jeff Bongo',
-  //   password: '123456789012',
-  //   confirmPassword: '123456789012',
-  // };
 
   const initialValues: SignUpFormProps = {
-    email: '',
-    name: '',
-    password: '',
-    confirmPassword: '',
+    email: 'foo@bar.com',
+    name: 'Jeff Bongo',
+    password: '12345',
+    confirmPassword: '12345',
   };
 
-  // const register = async (username: string, password: string) => {
-  //   try {
-  //     await createAccess(
-  //       username,
-  //       password,
-  //       searchParams.get('license') ?? undefined,
-  //     );
-  //   } catch (error) {
-  //     console.log('error creating access:', error);
-  //   }
-  // };
-
-  // const verifyCode = async () => {
-  //   try {
-  //     setConfirmingAccessErrors(undefined);
-  //     setConfirmingAccess(true);
-  //     await confirmAccess(code);
-  //     navigate('/details');
-  //   } catch (error) {
-  //     setConfirmingAccess(false);
-  //     setConfirmingAccessErrors(error as any);
-  //     console.log('error confirming access:', error);
-  //   }
-  // };
-
-  const onSubmitAsync = async () =>
-    //   values: ISignUpFormProps,
-    //   formikHelpers: FormikHelpers<ISignUpFormProps>,
-    {
-      //   await register(values.email, values.password);
-      alert(JSON.stringify(values, null, 2));
-    };
+  const onSubmit = (
+    values: SignUpFormProps,
+    formikHelpers: FormikHelpers<SignUpFormProps>,
+  ) => {
+    //alert(JSON.stringify(values, null, 2));
+    const { name, email, password } = values;
+    //signUp({ name, email, password });
+  };
 
   const validationSchema = object({
     email: string()
@@ -98,15 +55,15 @@ export default function SignUp() {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: onSubmitAsync,
+    onSubmit,
     validationSchema,
   });
 
   return (
     <AuthLayout>
-      <span className="text-l font-bold text-gray-900 ">
-        Sign up
-      </span>
+      <span className="text-l font-bold text-gray-900 ">Sign up</span>
+
+      {/* {isSignUpInProgress ?? <>Sign Up Is in Progress!!!</>} */}
 
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput

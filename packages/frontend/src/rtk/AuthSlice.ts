@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SignUpModel } from './SignUpModel';
+import { SignUpModel } from '../models/SignUpModel';
+
 
 export interface AuthState {
   userId: string | undefined;
@@ -54,6 +55,24 @@ const authSlice = createSlice({
         isSignUpInProgress: false,
       };
     },
+
+    signOutCommand: (state: AuthState): AuthState => {
+      return {
+        ...state,
+      };
+    },
+    // signOutSucceededEvent: (): AuthState => {
+    //   return initialState;
+    // },
+    // signOutFailedEvent: (
+    //   state: AuthState,
+    //   action: PayloadAction<string>,
+    // ): AuthState => {
+    //   return {
+    //     ...state,
+    //     errors: [...state.errors, action.payload],
+    //   };
+    // },
   },
 });
 
@@ -61,6 +80,10 @@ export const {
   resetAuthCommand,
 
   signUpCommand,
+  signUpFailedEvent,
+  signUpSucceededEvent,
+
+  signOutCommand
 } = authSlice.actions;
 
 export default authSlice.reducer;

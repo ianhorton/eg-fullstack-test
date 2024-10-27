@@ -1,11 +1,10 @@
-import { Navigate } from "react-router-dom";
-// import { useRecoilValue } from "recoil";
+import { ReactElement } from 'react';
+import { Navigate } from 'react-router-dom';
 
-// import { accessState } from "../state/access";
-import { ReactElement } from "react";
+//import { useAuthContext } from '../contexts/AuthContext';
 
 function RequiresSignIn({ children }: { children: ReactElement }) {
- // const { isSignedIn } = useRecoilValue(accessState);
+  //const { userId } = useAuthContext();
 
   if (true) {
     return children;
