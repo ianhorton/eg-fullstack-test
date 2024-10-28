@@ -6,6 +6,10 @@ export default function AuthLayout({ children }: PropsWithChildren) {
       <div className="m-2 w-96 p-2 sm:m-8 sm:rounded-lg sm:border sm:border-gray-300 sm:bg-slate-100 sm:p-8">
         <main>{children}</main>
       </div>
+
+      <div hidden={true}>
+  
+      </div>
     </div>
   );
 }

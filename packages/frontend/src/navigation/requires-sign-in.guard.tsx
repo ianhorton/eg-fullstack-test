@@ -4,9 +4,9 @@ import { useAppSelector } from '../state/hooks';
 
 function RequiresSignIn({ children }: { children: ReactElement }) {
 
-  const userId = useAppSelector((state) => state.authState.userId);
+  const token = useAppSelector((state) => state.authState.token);
 
-  if (userId) {
+  if (token) {
     return children;
   }
   return <Navigate to={`/sign-in`} />;

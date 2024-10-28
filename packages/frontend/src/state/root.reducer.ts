@@ -1,13 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import authSlice from './auth.slice';
-//import authTransientReducer from './AuthTransientReducer';
-import counterSlice from './counter.slice';
+import homeSlice from './home.slice';
 
 export const rootReducer = combineReducers({
   authState: authSlice,
-  //authTransientState: authTransientReducer,
-  counterState: counterSlice
+  homeState: homeSlice,
 });
-
-//export type RootState = ReturnType<typeof rootReducer>;

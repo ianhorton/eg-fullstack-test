@@ -1,43 +1,49 @@
-import { Button, ButtonGroup } from 'flowbite-react';
+import { Button } from 'flowbite-react';
+import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { signOutCommand } from '../state/auth.slice';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { decrement, increment } from '../state/counter.slice';
-import { signUpCommand } from '../state/auth.slice';
+import AuthLayout from '../components/auth-layout';
+import { fetchMessageCommand } from '../state/home.slice';
+import { LoaderButton } from '../components/loader-button';
 
 export default function Home() {
-  const count = useAppSelector((state) => state.counterState.value);
+  const token = useAppSelector((state) => state.authState.token);
+  const { errors, message, loading, loaded } = useAppSelector(
+    (state) => state.homeState,
+  );
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const memoizedToken = useMemo(() => {
+    return token;
+  }, [token]);
+
+  useEffect(() => {
+    if (memoizedToken === undefined) {
+      navigate('/');
+    }
+  }, [memoizedToken]);
+
+  useEffect(() => {
+    dispatch(fetchMessageCommand());
+  }, []);
 
   return (
-    <>
-      {/* <button
-        type="button"
-        className=":ring-cyan-700 group relative flex items-stretch justify-center rounded-none border border-l-0 border-gray-200 bg-white p-0.5 pl-0 text-center font-medium text-gray-900 transition-[color,background-color,border-color,text-decoration-color,fill,stroke,box-shadow] focus:z-10 focus:text-cyan-700 focus:outline-none focus:ring-2 enabled:hover:bg-gray-100 enabled:hover:text-cyan-700 dark:border-gray-600 dark:bg-transparent dark:text-gray-400 dark:enabled:hover:bg-gray-700 dark:enabled:hover:text-white">
-        <span className="flex items-stretch rounded-none px-4 py-2 text-sm transition-all duration-200">
-          Down
-        </span>
-      </button> */}
-      <h1>{count}</h1>
-      <Button.Group>
-        <Button color="gray" onClick={() => dispatch(increment())}>
-          Up
-        </Button>
-        <Button color="gray" onClick={() => dispatch(decrement())}>
-          Down
-        </Button>
-        <Button
-          color="gray"
-          onClick={() =>
-            dispatch(
-              signUpCommand({
-                name: 'Jeff Bongo',
-                email: 'jb@foo.com',
-                password: 'xxxxxx',
-              }),
-            )
-          }>
-          Sign up
-        </Button>
-      </Button.Group>
-    </>
+    <AuthLayout>
+      <div className="flex flex-col justify-center items-center _border border-black p-8">
+        {loading && (
+          <span className="text-l font-bold text-gray-900 ">LOADING!!</span>
+        )}
+        {loaded && message && (
+          <span className="text-l font-bold text-gray-900 ">{message}</span>
+        )}
+ 
+        <LoaderButton   onClick={() => dispatch(signOutCommand())}  isLoading={loading}>
+          Sign out
+        </LoaderButton>
+      </div>
+    </AuthLayout>
   );
 }

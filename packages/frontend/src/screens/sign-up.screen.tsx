@@ -11,6 +11,7 @@ import { signUpCommand } from '../state/auth.slice';
 import { ApiAdapter } from '../api/api-adapter';
 import { useEffect } from 'react';
 import FormError from '../components/form-error';
+import { LoaderButton } from '../components/loader-button';
 
 type SignUpFormProps = {
   email: string;
@@ -63,13 +64,25 @@ export default function SignUp() {
     <AuthLayout>
       <span className="text-l font-bold text-gray-900 ">Sign up</span>
 
+      {/* <div className="flex">
+        <div className="relative w-full">
+          <input
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500"
+            type="name"
+            id="name"
+            placeholder="Your Name"
+            required
+            value="Jeff Bongo"></input>
+        </div>
+      </div> */}
+
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput
           id="name"
           label="Name"
           placeholder="Your Name"
           required={true}
-          type="name"
+          type="text"
           onChange={handleChange}
           onBlur={handleBlur}
           touched={touched.name}
@@ -115,12 +128,16 @@ export default function SignUp() {
           errors={errors.confirmPassword}
           value={values.confirmPassword}
         />
+
         {authErrors.map((e, i) => {
-          return <FormError key={i} errors={e} />;
+          if (e) {
+            return <FormError key={i} errors={e} />;
+          }
         })}
-        <Button disabled={isSignUpInProgress} type="submit">
-          Sign up
-        </Button>
+   
+        <LoaderButton isLoading={isSignUpInProgress} type="submit">
+          Click me
+        </LoaderButton>
         <Label className="flex" htmlFor="agree">
           Already have an account?
           <a href="/sign-in" className="text-cyan-700 hover:underline">

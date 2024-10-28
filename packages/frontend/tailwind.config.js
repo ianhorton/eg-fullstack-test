@@ -5,6 +5,7 @@ module.exports = {
   content: [
     "./public/index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
+    "/packages/frontend/src/**/*.{js,jsx,ts,tsx}",
     "../../node_modules/flowbite-react/lib/esm/**/*.js",
     flowbite.content(),
   ],

@@ -39,6 +39,7 @@ const authSlice = createSlice({
       return {
         ...state,
         isSignUpInProgress: true,
+        errors: []
       };
     },
 
@@ -67,9 +68,7 @@ const authSlice = createSlice({
     },
 
     signOutCommand: (state: AuthState): AuthState => {
-      return {
-        ...state,
-      };
+      return initialState;
     },
 
     signInCommand: (
@@ -79,6 +78,7 @@ const authSlice = createSlice({
       return {
         ...state,
         isSignInInProgress: true,
+        errors: []
       };
     },
 
@@ -102,7 +102,7 @@ const authSlice = createSlice({
       return {
         ...state,
         errors: [...state.errors, action.payload],
-        isSignUpInProgress: false,
+        isSignInInProgress: false,
       };
     },
   },

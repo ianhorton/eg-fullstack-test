@@ -1,14 +1,23 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
+
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/auth.guard';
+import { ResponseBuilder, ResponseWrapper } from './common/response.builder';
 
 @Controller('api')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @UseGuards(AuthGuard)
-  @Get('hello')
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('welcome')
+  getWelcome(
+    @Res({ passthrough: true }) res: Response,
+  ): ResponseWrapper<string> {
+    const r = this.appService.getWelcome();
+    const reponse = ResponseBuilder.build(r);
+    res.status(reponse.httpStatus);
+    return reponse;
   }
 }

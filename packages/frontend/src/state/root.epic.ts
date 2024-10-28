@@ -1,8 +1,8 @@
 import { combineEpics } from 'redux-observable';
 
 import authEpic from './auth.epic';
-//import { expenseEpic } from "./expense";
+import homeEpic from './home.epic';
 
-const rootEpic = combineEpics(authEpic);
+const rootEpic = combineEpics(authEpic, homeEpic);
 
 export { rootEpic };

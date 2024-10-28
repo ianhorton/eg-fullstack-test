@@ -29,7 +29,7 @@ import { TokenModel } from '../models/token.model';
 const signUpCommandEpic$: Epic = (
   action$: Observable<PayloadAction<SignUpModel>>,
   rootState$: Observable<RootState>,
-  { api: { signUp, hello } }: EpicDependencies,
+  { api: { signUp } }: EpicDependencies,
 ) => {
   return action$.pipe(
     filter((action) => signUpCommand.match(action)),

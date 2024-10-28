@@ -1,6 +1,6 @@
 import { Button, Label } from 'flowbite-react';
 import { FormikHelpers, useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
@@ -9,6 +9,7 @@ import { FormTextInput } from '../components/form-text-input';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { signInCommand } from '../state/auth.slice';
 import FormError from '../components/form-error';
+import { LoaderButton } from '../components/loader-button';
 
 type SignInFormProps = {
   email: string;
@@ -20,7 +21,19 @@ export default function SignIn() {
     (state) => state.authState.isSignInInProgress,
   );
   const authErrors = useAppSelector((state) => state.authState.errors);
+  const token = useAppSelector((state) => state.authState.token);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const memoizedToken = useMemo(() => {
+    return token;
+  }, [token]);
+
+  useEffect(() => {
+    if (memoizedToken) {
+      navigate('/');
+    }
+  }, [memoizedToken]);
 
   const initialValues: SignInFormProps = {
     email: 'jb@foo.com',
@@ -42,18 +55,12 @@ export default function SignIn() {
     password: string().required('Password is required'),
   });
 
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    errors,
-    touched,
-    handleBlur,
-  } = useFormik({
-    initialValues,
-    onSubmit,
-    validationSchema,
-  });
+  const { values, handleChange, handleSubmit, errors, touched, handleBlur } =
+    useFormik({
+      initialValues,
+      onSubmit,
+      validationSchema,
+    });
 
   return (
     <AuthLayout>
@@ -87,11 +94,13 @@ export default function SignIn() {
           value={values.password}
         />
         {authErrors.map((e, i) => {
-          return <FormError key={i} errors={e} />;
+          if (e) {
+            return <FormError key={i} errors={e} />;
+          }
         })}
-        <Button disabled={isSignInInProgress} type="submit">
+        <LoaderButton isLoading={isSignInInProgress} type="submit">
           Sign in
-        </Button>
+        </LoaderButton>
         <Label className="flex" htmlFor="agree">
           <p>No account?</p>
           <a
