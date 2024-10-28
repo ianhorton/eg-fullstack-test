@@ -12,6 +12,7 @@ import { ApiAdapter } from '../api/api-adapter';
 import { useEffect } from 'react';
 import FormError from '../components/form-error';
 import { LoaderButton } from '../components/loader-button';
+import { passwordValidator } from '../common/password-validator';
 
 type SignUpFormProps = {
   email: string;
@@ -47,7 +48,15 @@ export default function SignUp() {
       .email('Invalid valid email address')
       .required('Email address is required'),
     name: string().required('Name is required'),
-    password: string().required('Password is required'),
+    password: string()
+      .required('Password is required')
+      .test(
+        'validate-password',
+        'The password must be at least 8 characters and contain at least a letter, a number and special character.',
+        function (value) {
+          return passwordValidator(value);
+        },
+      ),
     confirmPassword: string()
       .oneOf([ref('password'), undefined], "Passwords don't match")
       .required('Confirm Password is required'),
@@ -63,18 +72,6 @@ export default function SignUp() {
   return (
     <AuthLayout>
       <span className="text-l font-bold text-gray-900 ">Sign up</span>
-
-      {/* <div className="flex">
-        <div className="relative w-full">
-          <input
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500"
-            type="name"
-            id="name"
-            placeholder="Your Name"
-            required
-            value="Jeff Bongo"></input>
-        </div>
-      </div> */}
 
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
         <FormTextInput
@@ -134,7 +131,7 @@ export default function SignUp() {
             return <FormError key={i} errors={e} />;
           }
         })}
-   
+
         <LoaderButton isLoading={isSignUpInProgress} type="submit">
           Click me
         </LoaderButton>
