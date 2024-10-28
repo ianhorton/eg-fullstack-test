@@ -6,6 +6,8 @@ Coding task for Easy Generator.
 ## Notes
 - NPM monorepo - I would generally use Yarn Workspaces but I wanted to keep this simple
 - Has examples of all the tests but not full coverage
+- Config could be better
+- this does not run on HTTPS, if it was a production app it would
 
 ## Instructions
 - in the root run `npm install`
