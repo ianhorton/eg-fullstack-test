@@ -1,27 +1,27 @@
 version: '3.8'
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./packages/frontend  # Path to your React app directory
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "80:80"  # Exposes the React app on port 80
-  #   depends_on:
-  #     - backend  # Ensures the backend is up before the frontend starts
-  #   env_file:
-  #     - ./packages/frontend/.env.docker
+  frontend:
+    build:
+      context: ./packages/frontend  # Path to your React app directory
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"  # Exposes the React app on port 80
+    depends_on:
+      - backend  # Ensures the backend is up before the frontend starts
+    env_file:
+      - ./packages/frontend/.env.docker
 
-  # backend:
-  #   build:
-  #     context: ./packages/backend  # Path to your NestJS app directory
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"  # Exposes the NestJS app on port 3000
-  #   environment:
-  #     MONGO_URI: mongodb://mongo:27017/eg-fullstack-test  # MongoDB URI for the backend to connect
-  #   depends_on:
-  #     - mongo  # Ensures MongoDB is up before the backend starts
+  backend:
+    build:
+      context: ./packages/backend  # Path to your NestJS app directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Exposes the NestJS app on port 3000
+    environment:
+      MONGO_URI: mongodb://mongo:27017/eg-fullstack-test  # MongoDB URI for the backend to connect
+    depends_on:
+      - mongo  # Ensures MongoDB is up before the backend starts
 
   mongo:
     image: mongo:6.0  # MongoDB version
