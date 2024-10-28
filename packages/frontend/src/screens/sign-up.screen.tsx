@@ -1,18 +1,14 @@
-import { Button, Label } from 'flowbite-react';
+import { Label } from 'flowbite-react';
 import { FormikHelpers, useFormik } from 'formik';
-// import { useState } from 'react';
-// import { useNavigate, useSearchParams } from 'react-router-dom';
-// import { useRecoilValue } from 'recoil';
 import { object, ref, string } from 'yup';
-import { FormTextInput } from '../components/form-text-input';
-import AuthLayout from '../components/auth-layout';
-import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { signUpCommand } from '../state/auth.slice';
-import { ApiAdapter } from '../api/api-adapter';
-import { useEffect } from 'react';
-import FormError from '../components/form-error';
-import { LoaderButton } from '../components/loader-button';
+
 import { passwordValidator } from '../common/password-validator';
+import AuthLayout from '../components/auth-layout';
+import FormError from '../components/form-error';
+import { FormTextInput } from '../components/form-text-input';
+import { LoaderButton } from '../components/loader-button';
+import { signUpCommand } from '../state/auth.slice';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
 
 type SignUpFormProps = {
   email: string;
@@ -29,10 +25,10 @@ export default function SignUp() {
   const dispatch = useAppDispatch();
 
   const initialValues: SignUpFormProps = {
-    email: 'foo@bar.com',
-    name: 'Jeff Bongo',
-    password: '12345',
-    confirmPassword: '12345',
+    email: '',
+    name: '',
+    password: '',
+    confirmPassword: '',
   };
 
   function onSubmit(
@@ -133,7 +129,7 @@ export default function SignUp() {
         })}
 
         <LoaderButton isLoading={isSignUpInProgress} type="submit">
-          Click me
+          Sign up
         </LoaderButton>
         <Label className="flex" htmlFor="agree">
           Already have an account?

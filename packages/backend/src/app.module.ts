@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/eg-fullstack-test'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
   ],
   controllers: [AppController],

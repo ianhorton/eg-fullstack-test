@@ -7,12 +7,7 @@ import { ResponseWrapper } from '../common/response-wrapper';
 import { SignUpModel } from '../models/sign-up.model';
 import { UserModel } from '../models/user.model';
 import { signUpCommandEpic$ } from './auth.epic';
-import {
-  initialState,
-  signUpCommand,
-  signUpFailedEvent,
-  signUpSucceededEvent,
-} from './auth.slice';
+import { initialState, signUpCommand, signUpFailedEvent, signUpSucceededEvent } from './auth.slice';
 import { EpicDependencies } from './epic-dependencies';
 import { RootState } from './store';
 

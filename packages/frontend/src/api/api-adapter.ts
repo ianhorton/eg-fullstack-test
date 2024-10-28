@@ -1,13 +1,13 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiPort } from './api-port';
-
+import api from './axios.config';
 
 export class ApiAdapter implements ApiPort {
   welcome(token: string): Promise<AxiosResponse> {
     const config: AxiosRequestConfig = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    return axios.get('api/welcome', config);
+    return api.get('api/welcome', config);
   }
 
   signUp(
@@ -15,10 +15,10 @@ export class ApiAdapter implements ApiPort {
     name: string,
     password: string,
   ): Promise<AxiosResponse> {
-    return axios.post('/auth/sign-up', { email, name, password });
+    return api.post('auth/sign-up', { email, name, password });
   }
 
   signIn(email: string, password: string): Promise<AxiosResponse> {
-    return axios.post('/auth/sign-in', { email, password });
+    return api.post('auth/sign-in', { email, password });
   }
 }
