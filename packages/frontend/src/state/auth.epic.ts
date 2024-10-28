@@ -5,7 +5,6 @@ import {
   filter,
   map,
   mergeMap,
-  withLatestFrom,
 } from 'rxjs/operators';
 
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -39,10 +38,13 @@ export const signUpCommandEpic$: Epic = (
         payload: { email, name, password },
       } = action;
       return from(signUp(email, name, password)).pipe(
-        map((response: AxiosResponse) => {
+        mergeMap((response: AxiosResponse) => {
           const res = response.data as ResponseWrapper<UserModel>;
           const p = res.payload;
-          return signUpSucceededEvent(p);
+          return of(
+            signUpSucceededEvent(p),
+            signInCommand({ email, password }),
+          );
         }),
         catchError((error: AxiosError) => {
           if (error.response.data) {
