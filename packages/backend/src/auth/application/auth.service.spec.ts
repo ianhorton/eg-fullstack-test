@@ -3,6 +3,7 @@ import { UserRepositoryPort } from '../ports/user.repository';
 import { TokenServicePort } from '../ports/token.service';
 import { User } from '../domain/entities/user.entity';
 import { PasswordServicePort } from '../ports/password.service';
+import { UserDto } from './dtos/user.dto';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -10,88 +11,150 @@ describe('AuthService', () => {
   let tokenServiceMock: jest.Mocked<TokenServicePort>;
   let passwordServiceMock: jest.Mocked<PasswordServicePort>;
 
-  // beforeEach(() => {
-  //   // Mock the UserRepositoryPort
-  //   userRepositoryMock = {
-  //     findByEmail: jest.fn(),
-  //     create: jest.fn(),
-  //     // You can add more methods as needed
-  //   } as jest.Mocked<UserRepositoryPort>;
+  beforeEach(() => {
+    // Mock the UserRepository
+    userRepositoryMock = {
+      findByEmail: jest.fn(),
+      create: jest.fn(),
+      // You can add more methods as needed
+    } as jest.Mocked<UserRepositoryPort>;
 
-  //   // Mock the TokenServicePort
-  //   tokenServiceMock = {
-  //     generateToken: jest.fn(),
-  //   } as jest.Mocked<TokenServicePort>;
+    // Mock the TokenService
+    tokenServiceMock = {
+      generateToken: jest.fn(),
+      verifyToken: jest.fn(),
+    } as jest.Mocked<TokenServicePort>;
+
+    passwordServiceMock = {
+      hashPassword: jest.fn(),
+      compareHash: jest.fn(),
+    } as jest.Mocked<PasswordServicePort>;
 
     // Initialize AuthService with the mocked dependencies
-    authService = new AuthService(passwordServiceMock, tokenServiceMock, userRepositoryMock);
+    authService = new AuthService(
+      passwordServiceMock,
+      tokenServiceMock,
+      userRepositoryMock,
+    );
   });
 
-  // describe('signUp', () => {
-  //   it('should throw an error if the user already exists', async () => {
-  //     userRepositoryMock.findByEmail.mockResolvedValueOnce({} as User); // Mock existing user
+  describe('signUp', () => {
+    it('should return a failed result if the user already exists', async () => {
+      // Arrange
+      userRepositoryMock.findByEmail.mockResolvedValueOnce({} as User); // Mock existing user
 
-  //     await expect(authService.signUp('test@test.com', 'jeff bongo', 'password')).rejects.toThrow(
-  //       'User already exists',
-  //     );
-  //     expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-  //   });
+      // Act
+      const result = await authService.signUp(
+        'test@test.com',
+        'jeff bongo',
+        'a1!09876',
+      );
 
-  //   // it('should hash the password and create a new user if the user does not exist', async () => {
-  //   //   userRepositoryMock.findByEmail.mockResolvedValueOnce(null); // No user found
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result.isSuccess).toBeFalsy();
+      expect(result.isError).toBeFalsy();
 
-  //   //   const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
+      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
+    });
 
-  //   //   await authService.signUp('test@test.com', 'password');
+    it('should hash the password and create a new user if the user does not exist', async () => {
+      // Arrange
+      userRepositoryMock.findByEmail.mockResolvedValueOnce(null); // No user found
+      passwordServiceMock.hashPassword.mockResolvedValueOnce('hashedPassword');
 
-  //   //   expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-  //   //   expect(bcryptHashSpy).toHaveBeenCalledWith('password', 10);
-  //   //   expect(userRepositoryMock.create).toHaveBeenCalledWith(
-  //   //     expect.any(User), // This checks that a User object is passed to create
-  //   //   );
+      // Act
+      const result = await authService.signUp(
+        'test@test.com',
+        'Jeff Bongo',
+        'a1!09876',
+      );
+      console.log(result);
 
-  //   //   bcryptHashSpy.mockRestore(); // Restore the original bcrypt hash implementation
-  //   // });
-  // });
+      // Assert
+      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
 
-//   describe('signIn', () => {
-//     it('should throw an error if the user is not found', async () => {
-//       userRepositoryMock.findByEmail.mockResolvedValueOnce(null);
+      expect(userRepositoryMock.create).toHaveBeenCalledWith(
+        expect.any(User), // This checks that a User object is passed to create
+      );
+      expect(result).not.toBeNull();
+      expect(result.isSuccess).toBeTruthy();
+      expect((result.payload as UserDto).email).toBe('test@test.com');
+      expect((result.payload as UserDto).name).toBe('Jeff Bongo');
+    });
+  });
 
-//       await expect(authService.signIn('test@test.com', 'password')).rejects.toThrow(
-//         'Invalid credentials',
-//       );
-//       expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-//     });
+  describe('signIn', () => {
+    it('should return failed result if the user is not found', async () => {
+      // Arrange
+      userRepositoryMock.findByEmail.mockResolvedValueOnce(null);
 
-//     it('should throw an error if the password is invalid', async () => {
-//       const user = {
-//         validatePassword: jest.fn().mockReturnValue(false), // Mock password validation failure
-//       } as unknown as User;
+      // Act
+      const result = await authService.signIn('test@test.com', 'password');
 
-//       userRepositoryMock.findByEmail.mockResolvedValueOnce(user);
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result.isSuccess).toBeFalsy();
+      expect(result.isError).toBeFalsy();
+      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
+    });
 
-//       await expect(authService.signIn('test@test.com', 'wrongpassword')).rejects.toThrow(
-//         'Invalid credentials',
-//       );
-//       expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-//       expect(user.validatePassword).toHaveBeenCalledWith('wrongpassword', bcrypt.compareSync);
-//     });
+    it('should return failed if the password is invalid', async () => {
+      // Arrange
+      const user = {
+        validatePassword: jest.fn().mockReturnValue(false), // Mock password validation failure
+      } as unknown as User;
 
-//     it('should return a token if the credentials are valid', async () => {
-//       const user = {
-//         validatePassword: jest.fn().mockReturnValue(true), // Mock valid password
-//       } as unknown as User;
+      userRepositoryMock.findByEmail.mockResolvedValueOnce(user);
 
-//       userRepositoryMock.findByEmail.mockResolvedValueOnce(user);
-//       tokenServiceMock.generateToken.mockReturnValue('generatedToken'); // Mock token generation
+      // Act
+      const result = await authService.signIn('test@test.com', 'wrongpassword');
 
-//       const token = await authService.signIn('test@test.com', 'password');
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result.isSuccess).toBeFalsy();
+      expect(result.isError).toBeFalsy();
+      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
+      expect(user.validatePassword).toHaveBeenCalledWith(
+        'wrongpassword',
+        passwordServiceMock.compareHash,
+      );
+    });
 
-//       expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('test@test.com');
-//       expect(user.validatePassword).toHaveBeenCalledWith('password', bcrypt.compareSync);
-//       expect(tokenServiceMock.generateToken).toHaveBeenCalledWith(user);
-//       expect(token).toBe('generatedToken');
-//     });
-//   });
-//});
+    it('should return a token if the credentials are valid', async () => {
+      // Arrange
+      const user = {
+        validatePassword: jest.fn().mockReturnValue(true), // Mock valid password
+      } as unknown as User;
+
+      userRepositoryMock.findByEmail.mockResolvedValueOnce(user);
+      tokenServiceMock.generateToken.mockReturnValue('generatedToken'); // Mock token generation
+
+      // Act
+      const result = await authService.signIn('test@test.com', 'password');
+
+      // Assert
+      expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
+      expect(user.validatePassword).toHaveBeenCalledWith(
+        'password',
+        passwordServiceMock.compareHash,
+      );
+      expect(tokenServiceMock.generateToken).toHaveBeenCalledWith(user);
+      expect(result).not.toBeNull();
+      expect(result.isSuccess).toBeTruthy();
+      expect(result.payload as { token: string }).toStrictEqual({
+        token: 'generatedToken',
+      });
+    });
+  });
+});

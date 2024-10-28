@@ -1,14 +1,16 @@
 import { Model } from 'mongoose';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { User } from '../../domain/entities/user.entity';
 import { UserRepositoryPort } from '../../ports/user.repository';
 import { MongoUser } from './mongo-user.schema';
 
+// bubbles exceptions up to next layer
 @Injectable()
 export class MongoUserRepositoryAdapter implements UserRepositoryPort {
+  private readonly logger = new Logger(MongoUserRepositoryAdapter.name);
   constructor(
     @InjectModel(MongoUser.name) private userModel: Model<MongoUser>,
   ) {}
@@ -20,7 +22,7 @@ export class MongoUserRepositoryAdapter implements UserRepositoryPort {
       userRecord.email,
       userRecord.name,
       userRecord.passwordHash,
-      userRecord._id.toString()
+      userRecord._id.toString(),
     );
   }
 
@@ -31,7 +33,7 @@ export class MongoUserRepositoryAdapter implements UserRepositoryPort {
       passwordHash: user.getPasswordHash(),
     });
     const result = await newUser.save();
-    console.log(result);
+    this.logger.debug('new user saved in mongo: ', { result });
     return result._id.toString();
   }
 }

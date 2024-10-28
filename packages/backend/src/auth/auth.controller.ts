@@ -23,6 +23,7 @@ export class AuthController {
     );
     const reponse = ResponseBuilder.build(result);
     res.status(reponse.httpStatus);
+    this.logger.debug(reponse);
     return reponse;
   }
 
@@ -35,6 +36,7 @@ export class AuthController {
     const result = await this.authService.signIn(body.email, body.password);
     const reponse = ResponseBuilder.build(result);
     res.status(reponse.httpStatus);
+    this.logger.debug(reponse);
     return reponse;
   }
 }
