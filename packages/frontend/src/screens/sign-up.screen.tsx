@@ -1,10 +1,9 @@
 import { Label } from 'flowbite-react';
 import { FormikHelpers, useFormik } from 'formik';
-<<<<<<< HEAD
-=======
+
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
->>>>>>> main
+
 import { object, ref, string } from 'yup';
 
 import { passwordValidator } from '../common/password-validator';
