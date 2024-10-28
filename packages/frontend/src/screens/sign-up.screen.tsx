@@ -29,10 +29,10 @@ export default function SignUp() {
   const dispatch = useAppDispatch();
 
   const initialValues: SignUpFormProps = {
-    email: 'foo@bar.com',
-    name: 'Jeff Bongo',
-    password: '12345',
-    confirmPassword: '12345',
+    email: '',
+    name: '',
+    password: '',
+    confirmPassword: '',
   };
 
   function onSubmit(
@@ -133,7 +133,7 @@ export default function SignUp() {
         })}
 
         <LoaderButton isLoading={isSignUpInProgress} type="submit">
-          Click me
+          Sign up
         </LoaderButton>
         <Label className="flex" htmlFor="agree">
           Already have an account?

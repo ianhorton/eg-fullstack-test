@@ -36,8 +36,8 @@ export default function SignIn() {
   }, [memoizedToken]);
 
   const initialValues: SignInFormProps = {
-    email: 'jb@foo.com',
-    password: '12345',
+    email: '',
+    password: '',
   };
 
   function onSubmit(
