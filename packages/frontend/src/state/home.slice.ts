@@ -7,7 +7,7 @@ export interface HomeState {
   errors: string[];
 }
 
-const initialState: HomeState = {
+export const initialState: HomeState = {
   message: undefined,
   loading: false,
   loaded: false,
@@ -20,6 +20,12 @@ const homeSlice = createSlice({
   reducers: {
     resetHomeCommand: (): HomeState => {
       return initialState;
+    },
+
+    resetHomeSucceededEvent: (state: HomeState): HomeState => {
+      return {
+        ...state,
+      };
     },
 
     fetchMessageCommand: (state: HomeState): HomeState => {
@@ -58,6 +64,7 @@ const homeSlice = createSlice({
 
 export const {
   resetHomeCommand,
+  resetHomeSucceededEvent,
 
   fetchMessageCommand,
   fetchMessageSucceededEvent,

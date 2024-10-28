@@ -26,9 +26,9 @@ import { ResponseWrapper } from '../common/response-wrapper';
 import { AxiosError, AxiosResponse } from 'axios';
 import { TokenModel } from '../models/token.model';
 
-const signUpCommandEpic$: Epic = (
+export const signUpCommandEpic$: Epic = (
   action$: Observable<PayloadAction<SignUpModel>>,
-  rootState$: Observable<RootState>,
+  state$: Observable<RootState>,
   { api: { signUp } }: EpicDependencies,
 ) => {
   return action$.pipe(
@@ -41,7 +41,8 @@ const signUpCommandEpic$: Epic = (
       return from(signUp(email, name, password)).pipe(
         map((response: AxiosResponse) => {
           const res = response.data as ResponseWrapper<UserModel>;
-          return signUpSucceededEvent(res.payload);
+          const p = res.payload;
+          return signUpSucceededEvent(p);
         }),
         catchError((error: AxiosError) => {
           if (error.response.data) {

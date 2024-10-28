@@ -14,7 +14,7 @@ export interface AuthState {
   tokenExpires: number | undefined;
 }
 
-const initialState: AuthState = {
+ export const initialState: AuthState = {
   userId: undefined,
   user: undefined,
   errors: [],
