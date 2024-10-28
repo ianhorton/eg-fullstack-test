@@ -1,5 +1,10 @@
 import { Label } from 'flowbite-react';
 import { FormikHelpers, useFormik } from 'formik';
+<<<<<<< HEAD
+=======
+import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> main
 import { object, ref, string } from 'yup';
 
 import { passwordValidator } from '../common/password-validator';
@@ -21,8 +26,20 @@ export default function SignUp() {
   const isSignUpInProgress = useAppSelector(
     (state) => state.authState.isSignUpInProgress,
   );
+  const token = useAppSelector((state) => state.authState.token);
   const authErrors = useAppSelector((state) => state.authState.errors);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const memoizedToken = useMemo(() => {
+    return token;
+  }, [token]);
+
+  useEffect(() => {
+    if (memoizedToken) {
+      navigate('/');
+    }
+  }, [memoizedToken]);
 
   const initialValues: SignUpFormProps = {
     email: '',
