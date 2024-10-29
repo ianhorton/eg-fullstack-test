@@ -1,4 +1,4 @@
-# Project Name
+# EG Fullstack Test
 
 ## Description
 Coding task for Easy Generator.
