@@ -12,8 +12,14 @@ Coding task for Easy Generator.
 ## Instructions
 - in the root run `npm install`
 - in the root run `docker-compose up` - in the main branch this will just start an instance on MongoDB
-- cd into packages/backend and run `npm run start:dev`
+- cd into packages/backend
+- create a `.env` file with:
+    - PORT=5000
+    - JWT_SECRET=ellie
+    - MONGO_URI=mongodb://localhost:27018/eg-fullstack-test
+- run `npm run start:dev`
 - cd into packages/frontend and `run npm start`
+
 
 ## Docker Version
 - In the root run `docker-compose up`
