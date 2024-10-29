@@ -7,7 +7,7 @@ Coding task for Easy Generator.
 - NPM monorepo - I would generally use Yarn Workspaces but I wanted to keep this simple
 - Has examples of all the tests but not full coverage
 - Config could be better
-- this does not run on HTTPS, if it was a production app it would
+- The components do not not run on HTTPS, if it was a production app it would
 
 ## Instructions
 - in the root run `npm install`
@@ -22,4 +22,5 @@ Coding task for Easy Generator.
 
 
 ## Docker Version
-- In the root run `docker-compose up`
+- check out the 'docker' branch
+- in the root run `docker-compose up
